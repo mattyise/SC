@@ -27,14 +27,14 @@
     dest: /tmp/AzureStackHCI/
   when: inventory_hostname == 'hv01'
 
-- name: Unmount DVD
-  ansible.posix.mount:
-    path: /mnt/iso
-    src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
-    fstype: iso9660
-    opts: ro,noauto
-    state: absent
-  run_once: true
+# - name: Unmount DVD
+#   ansible.posix.mount:
+#     path: /mnt/iso
+#     src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
+#     fstype: iso9660
+#     opts: ro,noauto
+#     state: absent
+#   run_once: true
 
 - name: Create Azure Stack HCI Autounattend.xml
   template:
