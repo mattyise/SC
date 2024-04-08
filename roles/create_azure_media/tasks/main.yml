@@ -15,11 +15,11 @@
 #     state: present
 #   when: inventory_hostname == 'hv01'
 
-# - name: Ensure destination directory exists
-#   file:
-#     path: /tmp/AzureStackHCI
-#     state: directory
-#   when: inventory_hostname == 'hv01'
+- name: Ensure destination directory exists
+  file:
+    path: /tmp/AzureStackHCI
+    state: directory
+  when: inventory_hostname == 'hv01'
 
 # - name: Copy the contents of the ISO to the target directory
 #   copy:
