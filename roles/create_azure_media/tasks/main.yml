@@ -35,6 +35,12 @@
 #     opts: ro,noauto
 #     state: absent
 #   when: inventory_hostname == 'hv01'
+- name: Install specific collection
+  ansible.builtin.command:
+    cmd: "ansible-galaxy collection install community.general"
+  register: install_result
+  changed_when: "'Installing' in install_result.stdout"
+  when: inventory_hostname == 'hv01'
 
 - name: Create Azure Stack HCI Autounattend.xml
   template:
