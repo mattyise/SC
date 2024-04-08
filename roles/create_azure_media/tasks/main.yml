@@ -3,7 +3,7 @@
 - name: Mount DVD read-only
   ansible.posix.mount:
     path: /mnt/iso
-    src: files/AzureStackHCI_20349.1607_en-us.iso
+    src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
     fstype: iso9660
     opts: ro,noauto
     state: present
@@ -24,7 +24,7 @@
 - name: Mount DVD read-only
   ansible.posix.mount:
     path: /mnt/iso
-    src: files/AzureStackHCI_20349.1607_en-us.iso
+    src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
     fstype: iso9660
     opts: ro,noauto
     state: absent
