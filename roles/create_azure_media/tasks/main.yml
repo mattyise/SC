@@ -12,8 +12,9 @@
     src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
     fstype: iso9660
     opts: ro,noauto,loop
-    state: present
+    state: ephemeral
   run_once: true
+  become: true
 
 - name: Ensure destination directory exists
   file:
