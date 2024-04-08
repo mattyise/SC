@@ -35,12 +35,6 @@
 #     opts: ro,noauto
 #     state: absent
 #   when: inventory_hostname == 'hv01'
-- name: Install specific collection
-  ansible.builtin.command:
-    cmd: "ansible-galaxy collection install community.general"
-  register: install_result
-  changed_when: "'Installing' in install_result.stdout"
-  when: inventory_hostname == 'hv01'
 
 - name: Create Azure Stack HCI Autounattend.xml
   template:
@@ -56,8 +50,8 @@
   community.general.iso_customize:
     src_iso: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
     dest_iso: "/opt/SharkCage/{{inventory_hostname}}_media.iso"
-    delete_files:
-      - "/Autounattend.xml"
+    # delete_files:
+    #   - "/Autounattend.xml"
     add_files:
       - src_file: "/tmp/AzureStackHCI/{{inventory_hostname}}_Autounattend.xml"
         dest_file: "/Autounattend.xml"
