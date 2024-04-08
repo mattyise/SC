@@ -40,7 +40,7 @@
                 <SynchronousCommand wcm:action="add">
                     <Order>3</Order>
                     <Description>Set IP</Description>
-                    <CommandLine>New-NetIPAddress -InterfaceIndex 1 -IPAddress {{ ansible_host }} -PrefixLength 24 -DefaultGateway {{ default_gateway }}</CommandLine>
+                    <CommandLine>powershell.exe -Command &quot;New-NetIPAddress -InterfaceIndex 1 -IPAddress {{ ansible_host }} -PrefixLength 24 -DefaultGateway {{ default_gateway }}&quot;</CommandLine>
                 </SynchronousCommand>
             </FirstLogonCommands>
         </component>
