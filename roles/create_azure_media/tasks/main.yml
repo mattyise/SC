@@ -6,13 +6,9 @@
     state: directory
   when: inventory_hostname == 'hv01'
 
-- name: Mount DVD read-only
-  ansible.posix.mount:
-    path: /mnt/iso
-    src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
-    fstype: iso9660
-    opts: ro,noauto,loop
-    state: ephemeral
+- name: Generate ISO image
+  command: |
+    mount -o loop /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso /mnt/iso
   when: inventory_hostname == 'hv01'
 
 - name: Ensure destination directory is gone
@@ -62,3 +58,9 @@
     -eltorito-alt-boot \
     -e efi/microsoft/boot/efisys_noprompt.bin \
     -no-emul-boot '/tmp/AzureStackHCI'
+
+- name: Ensure destination directory is gone
+  file:
+    path: /tmp/AzureStackHCI
+    state: absent
+  when: inventory_hostname == ansible_play_batch[-1]
