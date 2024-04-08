@@ -58,9 +58,3 @@
     -eltorito-alt-boot \
     -e efi/microsoft/boot/efisys_noprompt.bin \
     -no-emul-boot '/tmp/AzureStackHCI'
-
-- name: Ensure destination directory is gone
-  file:
-    path: /tmp/AzureStackHCI
-    state: absent
-  when: inventory_hostname == ansible_play_batch[-1]
