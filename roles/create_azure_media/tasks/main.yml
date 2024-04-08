@@ -11,7 +11,7 @@
     path: /mnt/iso
     src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
     fstype: iso9660
-    opts: ro,noauto
+    opts: ro,noauto,loop
     state: present
   run_once: true
 
