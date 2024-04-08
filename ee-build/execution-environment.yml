@@ -2,7 +2,7 @@
 version: 1
 
 build_arg_defaults:
-  EE_BASE_IMAGE: 'registry.redhat.io/ansible-automation-platform-24/ee-supported-rhel9:1.0.0-606'
+  EE_BASE_IMAGE: 'registry.redhat.io/ansible-automation-platform-23/ee-supported-rhel8:1.0.0-597'
     
 dependencies:
   system: bindep.txt
@@ -13,5 +13,5 @@ additional_build_steps:
     RUN whoami
     RUN cat /etc/os-release
   append:
-    - RUN echo This is a post-install command!
+    - RUN echo This is a post-install command0
     - RUN ls -la /etc
