@@ -1,40 +1,40 @@
 ---
 # tasks file for create_azure_media
-- name: Ensure destination directory exists
-  file:
-    path: /mnt/iso
-    state: directory
-  when: inventory_hostname == 'hv01'
+# - name: Ensure destination directory exists
+#   file:
+#     path: /mnt/iso
+#     state: directory
+#   when: inventory_hostname == 'hv01'
 
-- name: Mount DVD read-only
-  ansible.posix.mount:
-    path: /mnt/iso
-    src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
-    fstype: iso9660
-    opts: ro,noauto
-    state: present
-  when: inventory_hostname == 'hv01'
+# - name: Mount DVD read-only
+#   ansible.posix.mount:
+#     path: /mnt/iso
+#     src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
+#     fstype: iso9660
+#     opts: ro,noauto
+#     state: present
+#   when: inventory_hostname == 'hv01'
 
-- name: Ensure destination directory exists
-  file:
-    path: /tmp/AzureStackHCI
-    state: directory
-  when: inventory_hostname == 'hv01'
+# - name: Ensure destination directory exists
+#   file:
+#     path: /tmp/AzureStackHCI
+#     state: directory
+#   when: inventory_hostname == 'hv01'
 
-- name: Copy the contents of the ISO to the target directory
-  copy:
-    src: /mnt/iso/
-    dest: /tmp/AzureStackHCI/
-  when: inventory_hostname == 'hv01'
+# - name: Copy the contents of the ISO to the target directory
+#   copy:
+#     src: /mnt/iso/
+#     dest: /tmp/AzureStackHCI/
+#   when: inventory_hostname == 'hv01'
 
-- name: Mount DVD read-only
-  ansible.posix.mount:
-    path: /mnt/iso
-    src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
-    fstype: iso9660
-    opts: ro,noauto
-    state: absent
-  when: inventory_hostname == 'hv01'
+# - name: Mount DVD read-only
+#   ansible.posix.mount:
+#     path: /mnt/iso
+#     src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
+#     fstype: iso9660
+#     opts: ro,noauto
+#     state: absent
+#   when: inventory_hostname == 'hv01'
 
 - name: Create Azure Stack HCI Autounattend.xml
   template:
@@ -46,5 +46,13 @@
     path: "/opt/SharkCage/{{inventory_hostname}}_media.iso"
     state: absent
 
-- name: Create ISO
-  shell: genisoimage -b boot/etfsboot.com -no-emul-boot -c BOOT.CAT -iso-level 4 -J -l -D -N -joliet-long -relaxed-filenames -v -V "Custom" -udf -boot-info-table -eltorito-alt-boot -eltorito-boot efi/microsoft/boot/efisys_noprompt.bin -no-emul-boot -o '/opt/SharkCage/{{inventory_hostname}}_media.iso' -allow-limited-size '/tmp/AzureStackHCI'
+- name: "Customize ISO file"
+  community.general.iso_customize:
+    src_iso: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
+    dest_iso: "/opt/SharkCage/{{inventory_hostname}}_media.iso"
+    delete_files:
+      - "/Autounattend.xml"
+    add_files:
+      - src_file: "/tmp/AzureStackHCI/Autounattend.xml"
+        dest_file: "/Autounattend.xml"
+  register: customize_iso_result
