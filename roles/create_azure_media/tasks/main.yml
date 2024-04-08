@@ -50,9 +50,7 @@
   community.general.iso_customize:
     src_iso: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
     dest_iso: "/opt/SharkCage/{{inventory_hostname}}_media.iso"
-    delete_files:
-      - "Autounattend.xml"
     add_files:
       - src_file: "/opt/SharkCage/{{inventory_hostname}}_Autounattend.xml"
-        dest_file: "Autounattend.xml"
+        dest_file: "/Autounattend.xml"
   register: customize_iso_result
