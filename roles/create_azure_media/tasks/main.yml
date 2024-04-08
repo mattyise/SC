@@ -61,5 +61,5 @@
     -boot-load-size 4 \
     -boot-info-table \
     -eltorito-alt-boot \
-    -e efi/microsoft/boot/efisys_noprompt.bin \
+    -e efi/microsoft/boot/efisys.bin \
     -no-emul-boot '/tmp/AzureStackHCI'
