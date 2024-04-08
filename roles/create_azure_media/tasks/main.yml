@@ -16,6 +16,12 @@
   run_once: true
   become: true
 
+- name: Ensure destination directory is gone
+  file:
+    path: /tmp/AzureStackHCI
+    state: absent
+  run_once: true
+
 - name: Ensure destination directory exists
   file:
     path: /tmp/AzureStackHCI
@@ -23,9 +29,7 @@
   run_once: true
 
 - name: Copy the contents of the ISO to the target directory
-  copy:
-    src: /mnt/iso/
-    dest: /tmp/AzureStackHCI/
+  shell: cp -R /mnt/iso/ /tmp/AzureStackHCI/
   run_once: true
 
 - name: Unmount DVD
