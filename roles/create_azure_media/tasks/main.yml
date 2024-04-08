@@ -48,13 +48,23 @@
 
 - name: Generate ISO image
   command: |
-    genisoimage -relaxed-filenames -J -R \
-    -o '/opt/SharkCage/{{inventory_hostname}}_media.iso' \
+    genisoimage \
     -b boot/etfsboot.com \
-    -c BOOT.CAT \
     -no-emul-boot \
-    -boot-load-size 4 \
+    -c BOOT.CAT \
+    -iso-level 4 \
+    -J \
+    -l \
+    -D \
+    -N \
+    -joliet-long \
+    -relaxed-filenames \
+    -v \
+    -V "Custom" \
+    -udf \
     -boot-info-table \
     -eltorito-alt-boot \
-    -e efi/microsoft/boot/efisys_noprompt.bin \
-    -no-emul-boot '/tmp/AzureStackHCI'
+    -eltorito-boot efi/microsoft/boot/efisys_noprompt.bin \
+    -no-emul-boot \
+    -o '/opt/SharkCage/{{ inventory_hostname }}_media.iso' \
+    -allow-limited-size '/tmp/AzureStackHCI'
