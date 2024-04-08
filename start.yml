@@ -1,17 +1,20 @@
 ---
 
 - name: Get Local Hostname
-
   hosts: localhost
-
   gather_facts: yes  # This is essential to gather system facts, including the hostname
 
-
-
   tasks:
-
     - name: Display the hostname
-
       debug:
-
         msg: "The hostname of the localhost is {{ ansible_facts['hostname'] }}"
+
+    - name: find folder contents
+      find:
+        paths: /opt/SharkCage
+        file_type: file
+      register: files
+
+    - name: Display the files
+      debug:
+        msg: "The files in the folder are {{ files.files }}"
