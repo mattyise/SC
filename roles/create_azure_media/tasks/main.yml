@@ -4,7 +4,7 @@
   file:
     path: /mnt/iso
     state: directory
-  run_once: true
+  when: inventory_hostname == 'hv01'
 
 - name: Mount DVD read-only
   ansible.posix.mount:
@@ -13,24 +13,23 @@
     fstype: iso9660
     opts: ro,noauto,loop
     state: ephemeral
-  run_once: true
-  become: true
+  when: inventory_hostname == 'hv01'
 
 - name: Ensure destination directory is gone
   file:
     path: /tmp/AzureStackHCI
     state: absent
-  run_once: true
+  when: inventory_hostname == 'hv01'
 
 - name: Ensure destination directory exists
   file:
     path: /tmp/AzureStackHCI
     state: directory
-  run_once: true
+  when: inventory_hostname == 'hv01'
 
 - name: Copy the contents of the ISO to the target directory
   shell: cp -R /mnt/iso/* /tmp/AzureStackHCI/
-  run_once: true
+  when: inventory_hostname == 'hv01'
 
 - name: Unmount DVD
   ansible.posix.mount:
@@ -39,7 +38,7 @@
     fstype: iso9660
     opts: ro,noauto
     state: absent
-  run_once: true
+  when: inventory_hostname == 'hv01'
 
 - name: Create Azure Stack HCI Autounattend.xml
   template:
