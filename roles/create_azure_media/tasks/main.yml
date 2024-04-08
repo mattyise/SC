@@ -29,7 +29,7 @@
   run_once: true
 
 - name: Copy the contents of the ISO to the target directory
-  shell: cp -R /mnt/iso/ /tmp/AzureStackHCI/
+  shell: cp -R /mnt/iso/* /tmp/AzureStackHCI/
   run_once: true
 
 - name: Unmount DVD
