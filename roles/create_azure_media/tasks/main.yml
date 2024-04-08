@@ -1,5 +1,11 @@
 ---
 # tasks file for create_azure_media
+- name: Ensure destination directory exists
+  file:
+    path: /mnt/iso
+    state: directory
+  when: inventory_hostname == 'hv01'
+
 - name: Mount DVD read-only
   ansible.posix.mount:
     path: /mnt/iso
