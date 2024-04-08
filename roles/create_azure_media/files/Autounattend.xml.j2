@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+    <settings pass="specialize">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <ComputerName>{{ inventory_hostname }}</ComputerName>
+            <RegisteredOrganization>US Navy</RegisteredOrganization>
+            <RegisteredOwner>DoD</RegisteredOwner>
+        </component>
+        <component name="Networking-MPSSVC-Svc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="NonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DomainProfile_EnableFirewall>false</DomainProfile_EnableFirewall>
+            <DomainProfile_LogDroppedPackets>true</DomainProfile_LogDroppedPackets>
+            <PrivateProfile_EnableFirewall>false</PrivateProfile_EnableFirewall>
+            <PrivateProfile_LogDroppedPackets>true</PrivateProfile_LogDroppedPackets>
+            <DomainProfile_LogFile>%systemroot%\system32\LogFiles\Firewall\domain_firewall.log</DomainProfile_LogFile>
+            <PrivateProfile_LogFile>%systemroot%\system32\LogFiles\Firewall\private_firewall.log</PrivateProfile_LogFile>
+            <PublicProfile_LogFile>%systemroot%\system32\LogFiles\Firewall\public_firewall.log</PublicProfile_LogFile>
+            <PublicProfile_EnableFirewall>false</PublicProfile_EnableFirewall>
+            <PublicProfile_LogDroppedPackets>true</PublicProfile_LogDroppedPackets>
+        </component>
+    </settings>
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <UserAccounts>
+                <AdministratorPassword>
+                    <Value>VwBXAFQAdwB3AHQAMQAhAFcAVwBUAHcAdwB0ADEAIQBBAGQAbQBpAG4AaQBzAHQAcgBhAHQAbwByAFAAYQBzAHMAdwBvAHIAZAA=</Value>
+                    <PlainText>false</PlainText>
+                </AdministratorPassword>
+            </UserAccounts>
+            <FirstLogonCommands>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>powershell.exe -ExecutionPolicy Bypass -File C:\Windows\Setup\Scripts\Configure_WINRM.ps1</CommandLine>
+                    <Description>Enable WinRM For Ansible</Description>
+                    <Order>1</Order>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>reg add &quot;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server&quot; /v fDenyTSConnections /t REG_DWORD /d 0 /f</CommandLine>
+                    <Order>2</Order>
+                    <Description>Enable RDP</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <Order>3</Order>
+                    <Description>Set IP</Description>
+                    <CommandLine>New-NetIPAddress -InterfaceIndex 1 -IPAddress {{ ansible_host }} -PrefixLength 24 -DefaultGateway {{ default_gateway }}</CommandLine>
+                </SynchronousCommand>
+            </FirstLogonCommands>
+        </component>
+    </settings>
+    <settings pass="windowsPE">
+        <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <SetupUILanguage>
+                <UILanguage>en-US</UILanguage>
+            </SetupUILanguage>
+            <SystemLocale>en-US</SystemLocale>
+            <UILanguage>en-US</UILanguage>
+            <UILanguageFallback>en-US</UILanguageFallback>
+            <UserLocale>en-US</UserLocale>
+            <InputLocale>en-US</InputLocale>
+        </component>
+        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <UserData>
+                <AcceptEula>true</AcceptEula>
+                <FullName>US Navy</FullName>
+                <Organization>DoD</Organization>
+            </UserData>
+            <DiskConfiguration>
+                <Disk wcm:action="add">
+                    <CreatePartitions>
+                        <CreatePartition wcm:action="add">
+                            <Order>1</Order>
+                            <Type>EFI</Type>
+                            <Size>100</Size>
+                        </CreatePartition>
+                        <CreatePartition wcm:action="add">
+                            <Order>2</Order>
+                            <Type>MSR</Type>
+                            <Size>16</Size>
+                        </CreatePartition>
+                        <CreatePartition wcm:action="add">
+                            <Order>4</Order>
+                            <Extend>true</Extend>
+                            <Type>Primary</Type>
+                        </CreatePartition>
+                        <CreatePartition wcm:action="add">
+                            <Order>3</Order>
+                            <Size>626</Size>
+                            <Type>Primary</Type>
+                        </CreatePartition>
+                    </CreatePartitions>
+                    <ModifyPartitions>
+                        <ModifyPartition wcm:action="add">
+                            <Order>1</Order>
+                            <PartitionID>1</PartitionID>
+                            <Label></Label>
+                            <Format>FAT32</Format>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
+                            <PartitionID>2</PartitionID>
+                            <Order>2</Order>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
+                            <Order>4</Order>
+                            <PartitionID>4</PartitionID>
+                            <Letter>C</Letter>
+                            <Format>NTFS</Format>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
+                            <PartitionID>3</PartitionID>
+                            <Order>3</Order>
+                            <Format>NTFS</Format>
+                            <TypeID>de94bba4-06d1-4d40-a16a-bfd50179d6ac</TypeID>
+                        </ModifyPartition>
+                    </ModifyPartitions>
+                    <DiskID>0</DiskID>
+                    <WillWipeDisk>true</WillWipeDisk>
+                </Disk>
+                <WillShowUI>Never</WillShowUI>
+            </DiskConfiguration>
+            <ImageInstall>
+                <OSImage>
+                    <WillShowUI>OnError</WillShowUI>
+                    <InstallFrom>
+                        <MetaData wcm:action="add">
+                            <Key>/IMAGE/INDEX</Key>
+                            <Value>1</Value>
+                        </MetaData>
+                    </InstallFrom>
+                    <InstallTo>
+                        <DiskID>0</DiskID>
+                        <PartitionID>4</PartitionID>
+                    </InstallTo>
+                </OSImage>
+            </ImageInstall>
+        </component>
+    </settings>
+    <cpi:offlineImage cpi:source="wim:c:/users/meymatth/downloads/install.wim#Azure Stack HCI SERVERAZURESTACKHCICORE" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
+</unattend>

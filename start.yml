@@ -18,3 +18,11 @@
     - name: Display the files
       debug:
         msg: "The files in the folder are {{ files.files }}"
+
+- name: Build Azure HCI Stack Media
+  hosts: hypervisors
+  serial: 1
+  gather_facts: false
+  connection: local
+  roles:
+    - create_azure_media
