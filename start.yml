@@ -21,6 +21,7 @@
 
 - name: Build Azure HCI Stack Media
   hosts: hypervisors
+  serial: 1
   gather_facts: false
   connection: local
   roles:

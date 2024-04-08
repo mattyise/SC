@@ -26,45 +26,26 @@
   copy:
     src: /mnt/iso/
     dest: /tmp/AzureStackHCI/
-  when: inventory_hostname == 'hv01'
+  run_once: true
 
-# - name: Unmount DVD
-#   ansible.posix.mount:
-#     path: /mnt/iso
-#     src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
-#     fstype: iso9660
-#     opts: ro,noauto
-#     state: absent
-#   run_once: true
+- name: Unmount DVD
+  ansible.posix.mount:
+    path: /mnt/iso
+    src: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
+    fstype: iso9660
+    opts: ro,noauto
+    state: absent
+  run_once: true
 
 - name: Create Azure Stack HCI Autounattend.xml
   template:
     src: templates/Autounattend.xml.j2
-    dest: /opt/SharkCage/Autounattend.xml
+    dest: /tmp/AzureStackHCI/Autounattend.xml
 
 - name: Remove old ISO if it exists
   file:
     path: "/opt/SharkCage/{{inventory_hostname}}_media.iso"
     state: absent
-
-# - name: "Customize ISO file"
-#   community.general.iso_customize:
-#     src_iso: /opt/SharkCage/AzureStackHCI_20349.1607_en-us.iso
-#     dest_iso: "/opt/SharkCage/{{inventory_hostname}}_media.iso"
-#     add_files:
-#       - src_file: "/opt/SharkCage/{{inventory_hostname}}_Autounattend.xml"
-#         dest_file: "/Autounattend.xml"
-#   register: customize_iso_result
-
-# - name: Create an ISO file with Joliet support
-#   community.general.iso_create:
-#     src_files:
-#       - /tmp/AzureStackHCI/
-#       - 
-#     dest_iso: ./test.iso
-#     interchange_level: 3
-#     joliet: 3
-#     vol_ident: WIN_AUTOINSTALL
 
 - name: Create ISO
   shell: genisoimage -relaxed-filenames -J -R -o "/opt/SharkCage/{{inventory_hostname}}_media.iso" -b boot/etfsboot.com -c BOOT.CAT -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot efi/microsoft/boot/efisys_noprompt.bin -no-emul-boot '/tmp/AzureStackHCI/'
