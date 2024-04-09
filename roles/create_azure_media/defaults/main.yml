@@ -1,2 +1,4 @@
 ---
 # defaults file for create_azure_media
+azure_admin_pwd: '{{azure_admin_pwd}}AdministratorPassword'
+azure_unattend_pass: '{{ " ".join(azure_admin_pwd) | b64encode }}'
